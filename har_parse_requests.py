@@ -18,7 +18,7 @@ def my_custom_logger(logger_name, level=logging.DEBUG):
     console_handler.setFormatter(log_format)
     logger.addHandler(console_handler)
     # Creating and adding the file handler
-    file_handler = logging.FileHandler(os.path.join('out', logger_name + '.log'), mode='a')
+    file_handler = logging.FileHandler(os.path.join('out', logger_name + '.log'), mode='a+')
     file_handler.setFormatter(log_format)
     logger.addHandler(file_handler)
     return logger
@@ -49,6 +49,13 @@ def process_har(file_in):
 
 
 if __name__ == "__main__":
+    if not os.path.exists('hars'):
+        os.makedirs('hars')
+        print("No directory with .har files found. Creating directory...")
+        exit()
+    if not os.path.exists('out'):
+        os.makedirs('out')
+
     har_list = glob.glob(os.path.join('hars', '*.har'))
     for har_file in har_list:
         logger = my_custom_logger(os.path.basename(har_file))
